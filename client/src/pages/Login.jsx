@@ -17,6 +17,10 @@ import ForgotPassword from './ForgotPassword';
 import { GoogleIcon, FacebookIcon} from './CustomIcons';
 import AppTheme from '../shared-theme/AppTheme';
 import ColorModeSelect from '../shared-theme/ColorModeSelect';
+import { Alert } from '@mui/material';
+
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -61,6 +65,14 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignIn(props) {
+  const {
+    loginUser,
+    loginError,
+    isLoginLoading,
+    loginInfo,
+    updateLoginInfo
+  } = useContext(AuthContext)
+
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
@@ -73,18 +85,6 @@ export default function SignIn(props) {
 
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const handleSubmit = (event) => {
-    if (emailError || passwordError) {
-      event.preventDefault();
-      return;
-    }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
   };
 
   const validateInputs = () => {
@@ -129,7 +129,7 @@ export default function SignIn(props) {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={loginUser}
             noValidate
             sx={{
               display: 'flex',
@@ -154,6 +154,7 @@ export default function SignIn(props) {
                 variant="outlined"
                 color={emailError ? 'error' : 'primary'}
                 sx={{ ariaLabel: 'email' }}
+                onChange={(e) => updateLoginInfo({...loginInfo, email: e.target.value})}
               />
             </FormControl>
             <FormControl>
@@ -182,6 +183,7 @@ export default function SignIn(props) {
                 fullWidth
                 variant="outlined"
                 color={passwordError ? 'error' : 'primary'}
+                onChange={(e) => updateLoginInfo({...loginInfo, password: e.target.value})}
               />
             </FormControl>
             <FormControlLabel
@@ -189,6 +191,13 @@ export default function SignIn(props) {
               label="Ghi nhớ đăng nhập"
             />
             <ForgotPassword open={open} handleClose={handleClose} />
+            {
+              loginError?.error && (
+                <Alert variant="danger">
+                  <p>{loginError?.message}</p>
+                </Alert>
+              )
+            }
             <Button
               type="submit"
               fullWidth
