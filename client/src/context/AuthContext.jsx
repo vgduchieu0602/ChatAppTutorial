@@ -15,7 +15,15 @@ export const AuthContextProvider = ({ children }) => {
         password: ''
     })
 
+    const [loginError, setLoginError] = useState(null)    //Khởi tạo state Error của Login với giá trị khởi tạo là null
+    const [isLoginLoading, setIsLoginLoading] = useState(null)    //Khởi tạo state trạng thái xử lý của Login với giá trị khởi tạo là null
+    const [loginInfo, setLoginInfo] = useState({
+        email: '',
+        password: ''
+    })
+
     console.log("User:", user)
+    console.log("Login Info:", loginInfo)
 
     //Sau khi đăng ký xong lưu dữ liệu của User đã đăng ký vào localStorage
     //và lấy dữ liệu User từ storage ra trong lần đầu tải trang
@@ -64,6 +72,29 @@ export const AuthContextProvider = ({ children }) => {
         setUser(null)
     }, [])
 
+    const updateLoginInfo = useCallback((info) => {
+        setLoginInfo(info)
+    }, [])
+
+    const loginUser = useCallback(async (e) => {
+        e.preventDefault()
+
+        setIsLoginLoading(true)
+        setLoginError(null)
+        const response = await postRequest(`${baseUrl}/auth/login`, JSON.stringify(loginInfo))
+
+        setIsLoginLoading(false)
+
+        if(response.error) {
+            return setLoginError(response)
+        }
+
+        localStorage.setItem('User', JSON.stringify(response))
+
+        setUser(response)
+
+    }, [loginInfo])
+
     return (
         <AuthContext.Provider 
             value={{
@@ -73,7 +104,12 @@ export const AuthContextProvider = ({ children }) => {
                 registerUser,
                 registerError,
                 isRegisterLoading,
-                logoutUser
+                logoutUser,
+                loginUser,
+                loginError,
+                isLoginLoading,
+                loginInfo,
+                updateLoginInfo
             }}
         >
             {children}
