@@ -5,6 +5,7 @@ import { connectDB } from './lib/db.js'
 
 import userRoutes from './routes/user.js'
 import chatRoutes from './routes/chat.route.js'
+import messageRoutes from './routes/message.route.js'
 
 dotenv.config()
 
@@ -15,6 +16,8 @@ app.use(cors())
 
 app.use("/api/auth", userRoutes)
 app.use("/api/chat", chatRoutes)
+app.use("/api/message", messageRoutes)
+
 
 const PORT = process.env.PORT || 5000
 const URI = process.env.MONGO_URI
