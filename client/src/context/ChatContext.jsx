@@ -24,21 +24,24 @@ export const ChatContextProvider = ({children, user}) => {
                 }
 
                 setUserChats(response)
-
             }
         }
 
         getUserChats()
     }, [user])
 
-    return <ChatContext.Provider value={{
-        userChats, isUserChatsLoading, userChatsError
-    }}>
-        {children}
-    </ChatContext.Provider>
+    return (
+        <ChatContext.Provider value={{
+            userChats, 
+            isUserChatsLoading, 
+            userChatsError
+        }}>
+            {children}
+        </ChatContext.Provider>
+    )
 }
 
 ChatContextProvider.propTypes = {
     children: PropTypes.node.isRequired,
-    user: PropTypes.node.isRequired
+    user: PropTypes.object.isRequired,
 }
