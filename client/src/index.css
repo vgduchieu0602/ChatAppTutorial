@@ -75,6 +75,7 @@ body {
 
 /* Chat Box */
 .chat-box {
+  color: white;
   max-height: calc(100vh - 10rem);
   overflow-y: auto;
   background: rgb(25, 25, 25);
@@ -87,6 +88,7 @@ body {
 
 /* Chat Header */
 .chat-header {
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
