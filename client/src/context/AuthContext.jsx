@@ -23,7 +23,6 @@ export const AuthContextProvider = ({ children }) => {
     })
 
     console.log("User:", user)
-    console.log("Login Info:", loginInfo)
 
     //Sau khi đăng ký xong lưu dữ liệu của User đã đăng ký vào localStorage
     //và lấy dữ liệu User từ storage ra trong lần đầu tải trang
@@ -81,6 +80,7 @@ export const AuthContextProvider = ({ children }) => {
 
         setIsLoginLoading(true)
         setLoginError(null)
+
         const response = await postRequest(`${baseUrl}/auth/login`, JSON.stringify(loginInfo))
 
         setIsLoginLoading(false)
@@ -92,7 +92,6 @@ export const AuthContextProvider = ({ children }) => {
         localStorage.setItem('User', JSON.stringify(response))
 
         setUser(response)
-
     }, [loginInfo])
 
     return (
